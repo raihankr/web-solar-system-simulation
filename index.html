@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Solar System Simulation by Han</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        * {
+            font-family: Arial;
+            color: white;
+        }
+
+        html,
+        body {
+            overscroll-behavior-y: contain;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            overflow: none;
+            user-select: none;
+        }
+
+        #canvas {
+            background-color: #00001a;
+        }
+
+        #setting-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            transition: transform .2s;
+            text-decoration: none;
+        }
+
+        #setting-btn img {
+            width: 30pt;
+        }
+
+        #setting-container {
+            position: fixed;
+            opacity: 0%;
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            transform: translateY(100%);
+            background-color: #3f3f3f;
+            border-radius: 40px;
+            transition: all .5s;
+        }
+
+        #setting-container:target {
+            opacity: 100%;
+            padding: 30px;
+            transform: translateY(0);
+        }
+
+        #setting-close-btn,
+        #setting-close-btn:visited {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            text-align: center;
+            font-size: 25pt;
+            text-decoration: none;
+        }
+
+        .slider-container {
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .slider-container > input {
+            position: relative;
+            width: 100%
+        }
+
+        .slider-container > input:after {
+            display: inline-block;
+            content: attr(max);
+            color: white;
+            position: absolute;
+            right: 0;
+            top: 20px;
+        }
+
+        .slider-container > input:before {
+            display: inline-block;
+            content: attr(min);
+            color: white;
+            position: absolute;
+            left: 0;
+            top: 20px;
+        }
+
+        @media (hover: hover) {
+            #setting-btn:hover {
+                transform: scale(1.2)
+            }
+        }
+
+        #setting-btn:active {
+            transform: scale(.9)
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <a id="setting-btn" href="#setting-container"><img src="./setting_icon.png" /></a>
+    <div id="setting-container">
+        <a id="setting-close-btn" href="#">&times;</a>
+        <div class="slider-container">FPS: <span></span> <br/><input type="range" min="1" max="100" value="50" id="fps-slider" /></div>
+        <div class="slider-container">Speed: <span></span> <br/><input type="range" min=".25" max="20" value="1" step=".25"  id="speed-slider" /></div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
