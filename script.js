@@ -20,7 +20,10 @@ resize();
 window.addEventListener('resize', resize);
 
 let fps = 50;
-$('#fps-slider').addEventListener('input', () => {fps = $('#fps-slider').value; refresh()});
+$('#fps-slider').addEventListener('input', () => {
+    fps = $('#fps-slider').value;
+    refresh()
+});
 
 renderInterval = 0
 function refresh() {
@@ -30,7 +33,9 @@ function refresh() {
 refresh();
 
 let speed = 1;
-$('#speed-slider').addEventListener('input', () => {speed = $('#speed-slider').value});
+$('#speed-slider').addEventListener('input', () => {
+    speed = $('#speed-slider').value
+});
 
 let camX = 0, camY = 45, camZ = 12;
 
@@ -44,7 +49,8 @@ canvas.addEventListener('mousedown', () => mousedown = true);
 document.addEventListener('mouseup', () => mousedown = false);
 canvas.addEventListener('mousemove', e => {
     if (!mousedown) return lastMouseX = -1, lastMouseY = -1;
-    if (lastMouseX == -1 && lastMouseY == -1) lastMouseX = e.pageX, lastMouseY = e.pageY;
+    if (lastMouseX == -1 && lastMouseY == -1)
+        lastMouseX = e.pageX, lastMouseY = e.pageY;
 
     let deltaX = e.pageX - lastMouseX, deltaY = e.pageY - lastMouseY;
 
@@ -59,7 +65,8 @@ canvas.addEventListener('mousemove', e => {
     lastMouseX = e.pageX, lastMouseY = e.pageY;
 });
 
-let touched = false, scaling = false, lastTouchX = -1, lastTouchY = -1, lastPinchDist = -1;
+let touched = false, scaling = false,
+    lastTouchX = -1, lastTouchY = -1, lastPinchDist = -1;
 canvas.addEventListener('touchstart', e => {
     touched = true;
     if (e.touches.length == 2) scaling = true;
@@ -83,9 +90,11 @@ canvas.addEventListener('touchmove', e => {
     } else lastPinchDist = -1;
 
     if (touched) {
-        if (lastTouchX == -1 && lastTouchY == -1) lastTouchX = e.touches[0].pageX, lastTouchY = e.touches[0].pageY;
+        if (lastTouchX == -1 && lastTouchY == -1)
+            lastTouchX = e.touches[0].pageX, lastTouchY = e.touches[0].pageY;
 
-        let deltaX = e.touches[0].pageX - lastTouchX, deltaY = e.touches[0].pageY - lastTouchY;
+        let deltaX = e.touches[0].pageX - lastTouchX,
+            deltaY = e.touches[0].pageY - lastTouchY;
 
         if (deltaY > 0 && camY < 90) camY += 1;
         else if (deltaY < 0 && camY > -90) camY -= 1;
@@ -178,7 +187,8 @@ class Planet {
         let orbitRadius = max * (this.orbitRadius / camZ);
         ctx.fillStyle = this.color;
         ctx.beginPath();
-        ctx.arc(this.x = Math.cos((this.angle - camX + 90) * Math.PI / 180) * orbitRadius + midX,
+        ctx.arc(
+            this.x = Math.cos((this.angle - camX + 90) * Math.PI / 180) * orbitRadius + midX,
             this.y = Math.sin((this.angle - camX + 90) * Math.PI / 180) * orbitRadius * (camY / 90) + midY, radius, 0, 2 * Math.PI);
         ctx.fill();
 
@@ -201,41 +211,63 @@ let sun = {
     }
 };
 
-let planets = [
-    new Planet(.08, '#9c8a67', .4, 87 / 40, 3), // Mercury
-    new Planet(.08, '#dda520', .7, 225 / 40, 5), // Venus
-    new Planet(.08, '#1575ea', 1, 365 / 40, 7), // Earth
-    new Planet(.08, '#dd3200', 1.5, 687 / 40, 9), // Mars
-    new Planet(.15, '#804900', 5.2, 4380 / 40, 11), // Jupiter
-    new Planet(.15, '#e7b51d', 9.5, 10585 / 40, 13), // Saturn
-    new Planet(.15, '#3eb7ff', 19.8, 30660 / 40, 15), // Uranus
-    new Planet(.15, '#0000ff', 30, 60225 / 40, 17), // Uranus
-];
+let orbitRadius = []
+$('#real-distance').addEventListener('change', () => {
+    defineOrbitRadius();
+    buildPlanets();
+    buildOrbits();
+});
 
-let orbits = [
-    new Orbit(0.4, 2), // Mercury's orbit
-    new Orbit(0.7, 4), // Venus' orbit
-    new Orbit(1, 6), // Earth's orbit
-    new Orbit(1.5, 8), // Mars' orbit
-    new Orbit(5.2, 10), // Jupiter's orbit
-    new Orbit(9.5, 12), // Saturn's orbit
-    // new Ring(.4, planets[5], .5, .1, '#e7b51d'),
-    new Orbit(19.8, 14), // Uranus' orbit
-    new Orbit(30, 16) // Neptune's orbit
-];
-orbits.forEach(orbit => { orbit.startAngle = 0, orbit.endAngle = Math.PI });
+function defineOrbitRadius() {
+    if ($('#real-distance').checked)
+        orbitRadius = [.4, .7, 1, 1.5, 5.2, 9.5, 19.8, 30];
+    else orbitRadius = [.5, 1, 1.5, 2, 3, 4.5, 6, 7.5];
+}
+defineOrbitRadius();
 
-orbits = orbits.concat([
-    new Orbit(0.4, -2), // Mercury's orbit
-    new Orbit(0.7, -4), // Venus' orbit
-    new Orbit(1, -6), // Earth's orbit
-    new Orbit(1.5, -8), // Mars' orbit
-    new Orbit(5.2, -10), // Jupiter's orbit
-    new Orbit(9.5, -12), // Saturn's orbit
-    new Ring(.3, planets[5], -.5, .1, '#e7b51d'),
-    new Orbit(19.8, -14), // Uranus' orbit
-    new Orbit(30, -16) // Neptune's orbit
-]);
+let planets = [];
+function buildPlanets() {
+    planets = [
+        new Planet(.08, '#9c8a67', orbitRadius[0], 87 / 40, 3), // Mercury
+        new Planet(.08, '#dda520', orbitRadius[1], 225 / 40, 5), // Venus
+        new Planet(.08, '#1575ea', orbitRadius[2], 365 / 40, 7), // Earth
+        new Planet(.08, '#dd3200', orbitRadius[3], 687 / 40, 9), // Mars
+        new Planet(.15, '#804900', orbitRadius[4], 4380 / 40, 11), // Jupiter
+        new Planet(.15, '#e7b51d', orbitRadius[5], 10585 / 40, 13), // Saturn
+        new Planet(.15, '#3eb7ff', orbitRadius[6], 30660 / 40, 15), // Uranus
+        new Planet(.15, '#0000ff', orbitRadius[7], 60225 / 40, 17), // Neptune
+    ];
+}
+buildPlanets();
+
+let orbits = [];
+function buildOrbits() {
+    orbits = [
+        new Orbit(orbitRadius[0], 2), // Mercury's orbit
+        new Orbit(orbitRadius[1], 4), // Venus' orbit
+        new Orbit(orbitRadius[2], 6), // Earth's orbit
+        new Orbit(orbitRadius[3], 8), // Mars' orbit
+        new Orbit(orbitRadius[4], 10), // Jupiter's orbit
+        new Orbit(orbitRadius[5], 12), // Saturn's orbit
+        new Orbit(orbitRadius[6], 14), // Uranus' orbit
+        new Orbit(orbitRadius[7], 16) // Neptune's orbit
+    ];
+
+    orbits.forEach(orbit => { orbit.startAngle = 0, orbit.endAngle = Math.PI });
+
+    orbits = orbits.concat([
+        new Orbit(orbitRadius[0], -2), // Mercury's orbit
+        new Orbit(orbitRadius[1], -4), // Venus' orbit
+        new Orbit(orbitRadius[2], -6), // Earth's orbit
+        new Orbit(orbitRadius[3], -8), // Mars' orbit
+        new Orbit(orbitRadius[4], -10), // Jupiter's orbit
+        new Orbit(orbitRadius[5], -12), // Saturn's orbit
+        new Ring(.3, planets[5], -.5, .1, '#e7b51d'),
+        new Orbit(orbitRadius[6], -14), // Uranus' orbit
+        new Orbit(orbitRadius[7], -16) // Neptune's orbit
+    ]);
+}
+buildOrbits();
 
 function renderLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);

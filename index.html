@@ -31,7 +31,7 @@
         }
 
         #canvas {
-            background-color: #00001a;
+            background-image: radial-gradient(#262642, #00001a);
         }
 
         #setting-btn {
@@ -49,10 +49,13 @@
         #setting-container {
             position: fixed;
             opacity: 0%;
-            top: 15%;
-            left: 15%;
-            width: 70%;
-            height: 70%;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: clamp(200px, 70%, 600px);
+            height: clamp(200px, 70%, 600px);
             transform: translateY(100%);
             background-color: #3f3f3f;
             border-radius: 40px;
@@ -122,6 +125,8 @@
         <a id="setting-close-btn" href="#">&times;</a>
         <div class="slider-container">FPS: <span></span> <br/><input type="range" min="1" max="100" value="50" id="fps-slider" /></div>
         <div class="slider-container">Speed: <span></span> <br/><input type="range" min=".25" max="20" value="1" step=".25"  id="speed-slider" /></div>
+        <input type="checkbox" id="real-distance" />
+        <label for="real-distance">Real distance</label>
     </div>
 
     <script src="./script.js"></script>
