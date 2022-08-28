@@ -198,34 +198,6 @@ class Planet {
     }
 }
 
-class Star {
-    constructor(x, y, radius) {
-        this.absX = x;
-        this.absY = y;
-        this.radius = radius;
-        this.x = 0;
-        this.y = 0;
-    }
-
-    draw() {
-        let diffX = this.absX - camX;
-        diffX += (diffX > 180) ? -360 : (diffX < -180) ? 360 : 0;
-
-        let diffY = this.absY - camY;
-        diffY += (diffY > 180) ? -360 : (diffY < -180) ? 360 : 0;
-
-        this.x = Number((diffX * (max/180)).toFixed(1)) + midX;
-        this.y = Number(((this.absY - camY) * (max/180)).toFixed(1)) + midY;
-
-        ctx.lineWidth = this.radius;
-        ctx.fillStyle = 'white';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-        ctx.fill();
-    }
-}
-
-
 let sun = {
     radius: .2,
     lyr: function () { return 0 },
@@ -297,13 +269,9 @@ function buildOrbits() {
 }
 buildOrbits();
 
-let stars = [new Star(0, 0, 1)]
-
 function renderLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (let star of stars) star.draw();
-
+    
     let elements = [...orbits, sun, ...planets];
     elements.sort((a, b) => a.lyr() - b.lyr());
     for (let element of elements)
