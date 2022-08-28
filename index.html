@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <title>Solar System Simulation by Han</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Solar System Simulation by Han</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,6 +27,7 @@
             height: 100%;
             position: fixed;
             overflow: none;
+            -webkit-user-select: none;
             user-select: none;
         }
 
@@ -121,14 +122,14 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    <a id="setting-btn" href="#setting-container"><img src="./setting_icon.png" /></a>
+    <a id="setting-btn" href="#setting-container"><img src="./setting_icon.png" alt="Setting" title="Setting" /></a>
     <div id="setting-container">
-        <a id="setting-close-btn" href="#">&times;</a>
+        <a id="setting-close-btn" href="#" title="Close">&times;</a>
         <div class="slider-container">FPS: <span></span> <br /><input type="range" min="30" max="100" value="50"
-                id="fps-slider" /></div>
-        <div class="slider-container">Speed: <span></span> <br /><input type="range" min=".25" max="20" value="1"
-                step=".25" id="speed-slider" /></div>
-        <input type="checkbox" id="real-distance" />
+                id="fps-slider" title="FPS" /></div>
+        <div class="slider-container">Speed: <span></span>&times; <br /><input type="range" min=".25" max="20" value="1"
+                step=".25" id="speed-slider" title="Speed" /></div>
+        <input type="checkbox" id="real-distance" title="Real distance" />
         <label for="real-distance">Real distance</label>
         <br/><br/>
         
