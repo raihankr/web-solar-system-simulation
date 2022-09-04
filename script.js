@@ -108,6 +108,47 @@ canvas.addEventListener('touchmove', e => {
     } else lastTouchX = -1, lastTouchY = -1;
 });
 
+let datetimeInput = $('#datetime-input');
+datetimeInput.addEventListener('change', datetimeChange);
+
+function datetimeChange() {
+    $('#datetime-info').innerHTML = datetimeInput.value;
+
+    if (!datetimeInput.value)
+        return speed = $('#speed-slider').value;
+
+    speed = 0;
+
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let data = JSON.parse(xhr.responseText);
+
+            for (let index in planets)
+                planets[index].angle = -data[{
+                    0: 'Mercury',
+                    1: 'Venus',
+                    2: 'Sun',
+                    3: 'Mars',
+                    4: 'Jupiter',
+                    5: 'Saturn',
+                    6: 'Uranus',
+                    7: 'Neptune'
+                }[index]].hlon * 180 / Math.PI;
+            console.log(planets[2].angle)
+            console.log(data['Sun'].hlon * 180 / Math.PI)
+        }
+    }
+
+    xhr.open('GET', `https://pyephem-api.herokuapp.com/?iso_date=${datetimeInput.value}&only_planets=1`, true);
+    xhr.send();
+}
+
+$('#clear-date').addEventListener('click', () => {
+    datetimeInput.value = '';
+    datetimeChange();
+})
+
 class Orbit {
     constructor(radius, lyr) {
         this.radius = radius;
@@ -189,7 +230,8 @@ class Planet {
         ctx.beginPath();
         ctx.arc(
             this.x = Math.cos((this.angle - camX + 90) * Math.PI / 180) * orbitRadius + midX,
-            this.y = Math.sin((this.angle - camX + 90) * Math.PI / 180) * orbitRadius * (camY / 90) + midY, radius, 0, 2 * Math.PI);
+            this.y = Math.sin((this.angle - camX + 90) * Math.PI / 180) * orbitRadius * (camY / 90) + midY,
+            radius, 0, 2 * Math.PI);
         ctx.fill();
 
         this.angle -= 360 / (this.period * fps) * speed;
@@ -271,7 +313,7 @@ buildOrbits();
 
 function renderLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     let elements = [...orbits, sun, ...planets];
     elements.sort((a, b) => a.lyr() - b.lyr());
     for (let element of elements)

@@ -31,6 +31,10 @@
             user-select: none;
         }
 
+        .black-text {
+            color: black
+        }
+
         #canvas {
             background-image: radial-gradient(#262642, #00001a);
         }
@@ -108,6 +112,14 @@
             top: 20px;
         }
 
+        #datetime-info {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            text-align: right;
+            font-size: 15px;
+        }
+
         @media (hover: hover) {
             #setting-btn:hover {
                 transform: scale(1.2)
@@ -131,9 +143,12 @@
                 step=".25" id="speed-slider" title="Speed" /></div>
         <input type="checkbox" id="real-distance" title="Real distance" />
         <label for="real-distance">Real distance</label>
-        <br/><br/>
-        
+        <br /><br />
+        <label for="datetime-input">Show solar system configuration at date: </label>
+        <input type="datetime-local" id="datetime-input" class="black-text" style="border-radius: 10px" />
+        <button id="clear-date" class="black-text" style="border-radius: 20px">Clear date</button>
     </div>
+    <p id="datetime-info"></p>
 
     <script src="./script.js"></script>
 </body>
